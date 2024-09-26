@@ -27,3 +27,7 @@ class Character():
         print(self.name + " doesn't want to fight with you")
 
         return True
+    
+class Enemy(Character):
+    def __init__(self, char_name, char_description): #identical to constructor for superclass
+        super().__init__(char_name, char_description) # To make an enemy make a character first and then customise it
