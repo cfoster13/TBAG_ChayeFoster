@@ -1,4 +1,5 @@
 from room import Room
+from character import Enemy
 
 kitchen = Room("Kitchen")
 ballroom = Room("Ballroom")
@@ -13,11 +14,23 @@ dining_hall.link_room(kitchen, "north")
 dining_hall.link_room(ballroom, "west")
 ballroom.link_room(dining_hall, "east")
 
+zombie = Enemy("Zombie", "A scary loud bloodthirsty zombie")
+zombie.set_conversation("Ugggghhhhh, aarrrughhhhh")
+zombie.set_weakness("fire")
+
+dining_hall.set_character(zombie)
+
 current_room = kitchen
 
 while True:
     print("\n")
     current_room.get_details()
+
+    inhabitant = current_room.get_character()
+    if inhabitant is not None:
+        inhabitant.describe()
+
+
     command = input("> ")
     current_room = current_room.move(command)
 

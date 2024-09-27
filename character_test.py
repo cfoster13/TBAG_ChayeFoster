@@ -7,3 +7,4 @@ dave.talk()
 
 ben = Character("Ben", "A knight")
 ben.talk() # Ben doesn't want to talk
+ben.fight("sword")

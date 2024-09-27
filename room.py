@@ -3,6 +3,7 @@ class Room():
         self.name = room_name
         self.description = None
         self.linked_rooms = {} # dictionary
+        self.character = None
 
     def get_description(self):
         return self.description
@@ -18,6 +19,12 @@ class Room():
 
     def get_name(self):
         return self.name
+    
+    def set_character(self, new_character):
+        self.character = new_character
+
+    def get_character(self):
+        return self.character
     
     def link_room(self, room_to_link, direction):
         self.linked_rooms[direction] = room_to_link

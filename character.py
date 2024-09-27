@@ -31,3 +31,19 @@ class Character():
 class Enemy(Character):
     def __init__(self, char_name, char_description): #identical to constructor for superclass
         super().__init__(char_name, char_description) # To make an enemy make a character first and then customise it
+        self.weakness = None
+    # Adding weaknesses to the enemy
+    def set_weakness(self, item_weakness):
+        self.weakness = item_weakness
+    
+    def get_weakness(self):
+        return self.weakness
+    
+    #Overriding the previous fight method
+    def fight(self, combat_item):
+        if combat_item == self.weakness:
+            print(f"You fend {self.name} off with the {combat_item}")
+            return True
+        else:
+            print(f"{self.name} crushes you, puny adventurer")
+            return False
