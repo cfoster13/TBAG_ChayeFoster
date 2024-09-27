@@ -32,5 +32,26 @@ while True:
 
 
     command = input("> ")
-    current_room = current_room.move(command)
+
+    # Check if a direction was typed
+    if command in {"north", "east", "south", "west"}:
+        current_room = current_room.move(command)
+    elif command == "talk":
+        # add code
+        if inhabitant is not None:
+            inhabitant.talk()
+        else:
+            print("There isn't anyone in this room.")
+        #zombie.talk()
+    elif command == "fight":
+        fight_with = input("What would you like to fight with: ")
+        if inhabitant is not None:
+            inhabitant.fight(fight_with)
+            if inhabitant.get_weakness != fight_with: # Losing a fight with an enemy causes game to end
+                print("You have died, game over...")
+                exit()
+    else:
+        print("Not a valid input")
+
+    
 
