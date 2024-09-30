@@ -17,10 +17,12 @@ ballroom.link_room(dining_hall, "east")
 zombie = Enemy("Zombie", "A scary loud bloodthirsty zombie")
 zombie.set_conversation("Ugggghhhhh, aarrrughhhhh")
 zombie.set_weakness("fire")
+zombie.set_enemy_combat_item("axe")
 
 dining_hall.set_character(zombie)
 
 current_room = kitchen
+player_has_enemy_item = False
 
 while True:
     print("\n")
@@ -29,8 +31,14 @@ while True:
     inhabitant = current_room.get_character()
     if inhabitant is not None:
         inhabitant.describe()
-
-
+        if isinstance(inhabitant, Enemy):
+            print("------------------")
+            print("What will you do? ")
+            print("Fight")
+            print("Steal") #ADD OTHER OPTION FOR FRIENDLY CHARACTER: RESCUE, GIFT
+        
+        
+    
     command = input("> ")
 
     # Check if a direction was typed
@@ -44,14 +52,27 @@ while True:
             print("There isn't anyone in this room.")
         #zombie.talk()
     elif command == "fight":
-        fight_with = input("What would you like to fight with: ")
-        if inhabitant is not None:
+        if player_has_enemy_item == False and inhabitant is not None:
+            fight_with = input("What would you like to fight with: ")
             inhabitant.fight(fight_with)
             if inhabitant.get_weakness != fight_with: # Losing a fight with an enemy causes game to end
                 print("You have died, game over...")
                 exit()
+        elif inhabitant is not None:
+            inhabitant.fight(enemy_weapon)
+            
+
+    elif command == "steal":
+        if isinstance(inhabitant, Enemy): #Checking if instance is Enemy
+            print("Stealing...")
+            enemy_weapon = inhabitant.steal()
+            player_has_enemy_item = True
+        else:
+            print("No enemy to steal from")
     else:
         print("Not a valid input")
+
+    # MAKE A RUN OPTION
 
     
 
