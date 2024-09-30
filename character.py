@@ -1,4 +1,5 @@
 import random
+from player import Player
 
 class Character():
     # Creating a character
@@ -42,14 +43,7 @@ class Enemy(Character):
     def get_weakness(self):
         return self.weakness
     
-    #Overriding the previous fight method
-    def fight(self, combat_item):
-        if combat_item == self.weakness:
-            print(f"You fend {self.name} off with the {combat_item}")
-            return True
-        else:
-            print(f"{self.name} crushes you, puny adventurer") #ELIF STATEMENT IF HEARTS IS MORE THAN 0 TAKE A HEART, OTHERWISE GAME OVER
-            return False
+    
         
     def set_enemy_combat_item(self, enemy_combat_item):
         self.enemy_combat_item = enemy_combat_item
@@ -57,11 +51,32 @@ class Enemy(Character):
     def get_enemy_combat_item(self, enemy_combat_item):
         return self.enemy_combat_item
         
-    def steal(self):
+    def steal(self, player):
         rand_steal_chance = random.randint(1, 100)
-        if rand_steal_chance >= 70:
+        if rand_steal_chance >= 5: # chance of stealing
             print(f"You successfully stole, {self.enemy_combat_item}")
-        elif self.enemy_combat_item == None:
+            self.set_weakness(self.enemy_combat_item) # Changing weakness to enemy weapon so player can defeat enemy
+            return self.enemy_combat_item
+        
+        elif self.enemy_combat_item is None:
             print(f"{self.name} doesn't have a combat weapon")
+            return None
         else:
-            print(f"{self.name} prevented you from stealing, and attacks you in return") # ADD LOGIC TO LOSE A LIFE
+            # After a failed attempt player loses a live
+            player.set_player_lives(player.get_player_lives() - 1)
+            print(f"{self.name} prevented you from stealing, and attacks you in return")
+            print(f"You now have {Player.get_player_lives(player)} remaining")
+
+    #Overriding the previous fight method
+    def fight(self, combat_item, player):
+        if combat_item == self.weakness:
+            print(f"You fend {self.name} off with the {combat_item}") #Delete enemy from the room
+            return True
+        else:
+            if player.get_player_lives() > 0: # Check player lives
+                player.set_player_lives(player.get_player_lives() - 1)
+                print(f"{self.name} attacks you, {Player.get_player_lives(player)} lives remaining")
+                return True
+            else:
+                print(f"{self.name} crushes you, puny adventurer") #ELIF STATEMENT IF HEARTS IS MORE THAN 0 TAKE A HEART, OTHERWISE GAME OVER
+                return False

@@ -1,5 +1,6 @@
 from room import Room
 from character import Enemy
+from player import Player
 
 kitchen = Room("Kitchen")
 ballroom = Room("Ballroom")
@@ -22,7 +23,10 @@ zombie.set_enemy_combat_item("axe")
 dining_hall.set_character(zombie)
 
 current_room = kitchen
-player_has_enemy_item = False
+player_has_enemy_item = False # Becomes true once player has successfully stolen an item from an enemy
+# player_lives = 3 #Number of lives
+
+player = Player("player1", 3) # Creating a player class for number of 3 lives
 
 while True:
     print("\n")
@@ -54,19 +58,22 @@ while True:
     elif command == "fight":
         if player_has_enemy_item == False and inhabitant is not None:
             fight_with = input("What would you like to fight with: ")
-            inhabitant.fight(fight_with)
-            if inhabitant.get_weakness != fight_with: # Losing a fight with an enemy causes game to end
+            inhabitant.fight(fight_with, player)
+            if inhabitant.get_weakness != fight_with and player.get_player_lives() <= 0: # Losing all lives will cause game to end
                 print("You have died, game over...")
                 exit()
         elif inhabitant is not None:
-            inhabitant.fight(enemy_weapon)
+            inhabitant.fight(enemy_weapon, player)
             
 
     elif command == "steal":
         if isinstance(inhabitant, Enemy): #Checking if instance is Enemy
             print("Stealing...")
-            enemy_weapon = inhabitant.steal()
-            player_has_enemy_item = True
+            enemy_weapon = inhabitant.steal(player) 
+            player_has_enemy_item = True # player now has the enemy weapon = can now attack with this
+            if player.get_player_lives() <= 0:
+                print("You have died, game over...")
+                exit()
         else:
             print("No enemy to steal from")
     else:
