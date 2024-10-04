@@ -1,5 +1,6 @@
 from room import Room
 from character import Enemy
+from character import Friendly
 from player import Player
 
 kitchen = Room("Kitchen")
@@ -20,11 +21,18 @@ zombie.set_conversation("Ugggghhhhh, aarrrughhhhh")
 zombie.set_weakness("fire")
 zombie.set_enemy_combat_item("axe")
 
+
+
+max = Friendly("Max", "A nice man that seems willing to help")
+max.set_conversation("Why are you wondering around here... there are scary monsters around")
+friendly_item = max.set_friendly_item("sword")
+
 dining_hall.set_character(zombie)
+ballroom.set_character(max)
 
 current_room = kitchen
 player_has_enemy_item = False # Becomes true once player has successfully stolen an item from an enemy
-# player_lives = 3 #Number of lives
+
 
 player = Player("player1", 3) # Creating a player class for number of 3 lives
 
@@ -39,7 +47,17 @@ while True:
             print("------------------")
             print("What will you do? ")
             print("Fight")
-            print("Steal") #ADD OTHER OPTION FOR FRIENDLY CHARACTER: RESCUE, GIFT
+            print("Steal") 
+            print("Talk")
+            print("To move rooms enter: north, east, south, west")
+        
+        elif isinstance(inhabitant, Friendly):
+            print("------------------")
+            print("What will you do? ")
+            print("Hug")
+            print("Talk")
+            print("To move rooms enter: north, east, south, west")
+
         
         
     
@@ -76,6 +94,16 @@ while True:
                 exit()
         else:
             print("No enemy to steal from")
+
+    elif command == "hug":
+        if isinstance(inhabitant, Friendly): # checking for friendly character
+            inhabitant.hug(friendly_item, player, zombie)
+        else:
+            print("No friendly person around to hug.")
+    
+    
+    
+    
     else:
         print("Not a valid input")
 

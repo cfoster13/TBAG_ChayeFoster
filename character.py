@@ -43,8 +43,6 @@ class Enemy(Character):
     def get_weakness(self):
         return self.weakness
     
-    
-        
     def set_enemy_combat_item(self, enemy_combat_item):
         self.enemy_combat_item = enemy_combat_item
 
@@ -80,3 +78,33 @@ class Enemy(Character):
             else:
                 print(f"{self.name} crushes you, puny adventurer") #ELIF STATEMENT IF HEARTS IS MORE THAN 0 TAKE A HEART, OTHERWISE GAME OVER
                 return False
+            
+
+
+class Friendly(Character): # Have a chance of getting a weapon if you hug a character, otherwise they tell you I don't want to hug but will increase your health
+    def __init__(self, char_name, char_description):
+        super().__init__(char_name, char_description)
+
+
+    def set_friendly_item(self, friendly_item):
+        self.friendly_item = friendly_item
+
+    def get_friendly_item(self, friendly_item):
+        return self.friendly_item
+
+    def hug(self, friendly_item, player, enemy):
+        rand_hug_chance = random.randint(1, 100)
+        if (rand_hug_chance >= 60):
+            self.set_conversation(f"[{self.name} says: ] I needed that hug, have my weapon to fend off the enemies...")
+            print(self.conversation)
+            enemy.set_weakness(friendly_item) # Setting enemy weakness to the friendly item
+        else:
+            self.set_conversation(f"[{self.name} says: ] I'm not in the mood for a hug, however I will replenish your health...")
+            print(self.conversation)
+            player.set_player_lives(player.get_player_lives() + 1) # Retrives the player's lives and increases by 1
+            print(f"{self.name} replenishes your health, {Player.get_player_lives(player)} lives remaining")
+
+
+    
+
+

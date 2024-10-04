@@ -14,3 +14,9 @@ class Item():
     
     def set_description(self, item_description):
         self.description = item_description
+
+
+class Key(Item): # Player needs a key to open a locked door
+    def __init__(self):
+        self.name = "Key"
+        self.description = "A key to open a locked door"
