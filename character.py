@@ -1,5 +1,6 @@
 import random
 from player import Player
+from item import Key
 
 class Character():
     # Creating a character
@@ -95,14 +96,19 @@ class Friendly(Character): # Have a chance of getting a weapon if you hug a char
     def hug(self, friendly_item, player, enemy):
         rand_hug_chance = random.randint(1, 100)
         if (rand_hug_chance >= 60):
-            self.set_conversation(f"[{self.name} says: ] I needed that hug, have my weapon to fend off the enemies...")
+            self.set_conversation(f"[{self.name} says]: I needed that hug, have my weapon to fend off the enemies...")
             print(self.conversation)
             enemy.set_weakness(friendly_item) # Setting enemy weakness to the friendly item
         else:
-            self.set_conversation(f"[{self.name} says: ] I'm not in the mood for a hug, however I will replenish your health...")
+            self.set_conversation(f"[{self.name} says]: I'm not in the mood for a hug, however I will replenish your health...")
             print(self.conversation)
             player.set_player_lives(player.get_player_lives() + 1) # Retrives the player's lives and increases by 1
             print(f"{self.name} replenishes your health, {Player.get_player_lives(player)} lives remaining")
+
+    def steal(self, player):
+        rand_steal_chance = random.randint(1, 100)
+        if rand_steal_chance >= 5: # chance of stealing
+            print(f"You successfully stole, {Key.get_description()}")
 
 
     

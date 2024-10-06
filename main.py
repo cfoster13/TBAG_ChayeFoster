@@ -2,19 +2,24 @@ from room import Room
 from character import Enemy
 from character import Friendly
 from player import Player
+from item import Key
 
 kitchen = Room("Kitchen")
 ballroom = Room("Ballroom")
 dining_hall = Room("Dining Hall")
+storage_room = Room("Storage Room")
 
 kitchen.set_description("A dank and dirty room buzzing with flies")
 ballroom.set_description("A vast room with a shiny wooden floor")
 dining_hall.set_description("A large room with ornate golden decorations")
+storage_room.set_description("A small storage room, that needs a key to be unlocked")
 
 kitchen.link_room(dining_hall, "south")
 dining_hall.link_room(kitchen, "north")
 dining_hall.link_room(ballroom, "west")
 ballroom.link_room(dining_hall, "east")
+storage_room.link_room(kitchen, "south")
+kitchen.link_room(storage_room, "north")
 
 zombie = Enemy("Zombie", "A scary loud bloodthirsty zombie")
 zombie.set_conversation("Ugggghhhhh, aarrrughhhhh")
@@ -32,6 +37,9 @@ ballroom.set_character(max)
 
 current_room = kitchen
 player_has_enemy_item = False # Becomes true once player has successfully stolen an item from an enemy
+player_has_key = False # Becomes true once player has stolen a key from a friendly enemy
+
+storage_room_key = Key
 
 
 player = Player("player1", 3) # Creating a player class for number of 3 lives
@@ -56,6 +64,7 @@ while True:
             print("What will you do? ")
             print("Hug")
             print("Talk")
+            print("Steal")
             print("To move rooms enter: north, east, south, west")
 
         
@@ -66,6 +75,14 @@ while True:
     # Check if a direction was typed
     if command in {"north", "east", "south", "west"}:
         current_room = current_room.move(command)
+        if current_room == storage_room and player_has_key == False:
+            print("You need a key to access this room...")
+            print("You remain in the kitchen...")
+            current_room = kitchen
+        elif current_room == storage_room and player_has_key == True:
+            print("You use your key to open the door...")
+            print("Well done, you have found the escape route.")
+            exit()
     elif command == "talk":
         # add code
         if inhabitant is not None:
@@ -82,6 +99,7 @@ while True:
                 exit()
         elif inhabitant is not None:
             inhabitant.fight(enemy_weapon, player)
+            current_room.set_character = None # deleting a character from a room 
             
 
     elif command == "steal":
@@ -92,6 +110,9 @@ while True:
             if player.get_player_lives() <= 0:
                 print("You have died, game over...")
                 exit()
+        elif isinstance(inhabitant, Friendly):
+            player_has_key = True
+            print("You have obtained a key, which can open a locked door.")
         else:
             print("No enemy to steal from")
 
